@@ -17,7 +17,7 @@ class MainTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        controller.selectedService = service;
+        controller.selectService(service);
         Navigator.pushNamed(context, '/service');
       },
       child: Container(
@@ -72,10 +72,10 @@ class MainTile extends StatelessWidget {
                 Container(
                   alignment: Alignment.center,
                   width: 18.w,
-                  child: const Text(
-                    '00:00',
+                  child: Text(
+                    service.time,
                     overflow: TextOverflow.ellipsis,
-                  ).counter(),
+                  ).medium(),
                 ),
                 Container(
                   alignment: Alignment.centerRight,

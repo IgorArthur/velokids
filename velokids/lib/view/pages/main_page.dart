@@ -23,45 +23,49 @@ class MainPage extends StatelessWidget {
 
   Widget _handleBody(BuildContext context) {
     return GetBuilder<MainController>(
-        init: MainController(),
-        builder: (mainController) {
-          return SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.only(top: 2.h),
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  MainTile(
-                    service: mainController.car1,
-                    controller: mainController,
+      init: MainController(),
+      builder: (mainController) {
+        return SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.only(top: 2.h),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                MainTile(
+                  service: mainController.services[0]!,
+                  controller: mainController,
+                ),
+                MainTile(
+                  service: mainController.services[1]!,
+                  controller: mainController,
+                ),
+                MainTile(
+                  service: mainController.services[2]!,
+                  controller: mainController,
+                ),
+                MainTile(
+                  service: mainController.services[3]!,
+                  controller: mainController,
+                ),
+                MainTile(
+                  service: mainController.services[4]!,
+                  controller: mainController,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5.h),
+                  child: CommonButton(
+                    type: 1,
+                    title: 'HISTÓRICO',
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/history');
+                    },
                   ),
-                  MainTile(
-                    service: mainController.car2,
-                    controller: mainController,
-                  ),
-                  MainTile(
-                    service: mainController.car3,
-                    controller: mainController,
-                  ),
-                  MainTile(
-                    service: mainController.motorcycle1,
-                    controller: mainController,
-                  ),
-                  MainTile(
-                    service: mainController.motorcycle2,
-                    controller: mainController,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.h),
-                    child: CommonButton(
-                      type: 1,
-                      onPressed: () => Navigator.pushNamed(context, '/history'),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

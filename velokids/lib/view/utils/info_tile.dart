@@ -1,17 +1,19 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:velokids/view/utils/export_utils.dart';
 
 class InfoTile extends StatelessWidget {
-  InfoTile({
-    Key? key,
-    required this.title,
-    required this.firstInfo,
-    this.secondInfo,
-  }) : super(key: key);
+  InfoTile(
+      {Key? key, required this.title, required this.info, this.mask, this.hint})
+      : super(key: key);
 
   String title;
-  String firstInfo;
-  String? secondInfo;
+  ValueNotifier<String> info;
+
+  String? hint;
+  List<TextInputFormatter>? mask;
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +34,35 @@ class InfoTile extends StatelessWidget {
                 border: Border.all(color: AppColors.primary100),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: secondInfo != null
-                  ? Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            width: 35.w,
-                            child: Text(firstInfo).button()),
-                        const Expanded(child: SizedBox()),
-                        Container(
-                            alignment: Alignment.centerRight,
-                            width: 35.w,
-                            child: Text(secondInfo!).button()),
-                      ],
-                    )
-                  : SizedBox(width: 78.w, child: Text(firstInfo).button()),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                width: 77.w,
+                child: TextFormField(
+                  onChanged: (String value) {
+                    info.value = value;
+                  },
+                  inputFormatters: mask,
+                  initialValue: info.value,
+                  decoration: InputDecoration(
+                    enabledBorder: InputBorder.none,
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 3.w, bottom: 1.h),
+                    hintText: hint,
+                    hintStyle: const TextStyle(
+                      color: AppColors.neutral100,
+                      fontSize: 14,
+                    ),
+                  ),
+                  style: const TextStyle(
+                    color: AppColors.neutral200,
+                    fontSize: 14,
+                  ),
+                  cursorColor: AppColors.neutral100,
+                ),
+              ),
             ),
           ),
           Positioned(

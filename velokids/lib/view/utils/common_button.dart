@@ -1,15 +1,26 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:velokids/view/utils/export_utils.dart';
 
 class CommonButton extends StatelessWidget {
   CommonButton({
+    Key? key,
     required this.type,
     required this.onPressed,
-  });
+    required this.title,
+    this.icon,
+    this.iconColor,
+    this.iconSize,
+  }) : super(key: key);
 
   int type;
+  String title;
   Function() onPressed;
+
+  IconData? icon;
+  Color? iconColor;
+  double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -19,40 +30,28 @@ class CommonButton extends StatelessWidget {
         width: 53.w,
         height: 5.4.h,
         decoration: BoxDecoration(
-          color: type == 3 ? AppColors.neutral0 : AppColors.primary100,
+          color: type == 2 ? AppColors.neutral0 : AppColors.primary100,
           border: Border.all(
-            color: type == 3 ? AppColors.error100 : AppColors.neutral0,
+            color: type == 2 ? AppColors.error100 : AppColors.neutral0,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            type == 1
+            icon == null
                 ? const SizedBox()
-                : type == 2
-                    ? Padding(
-                        padding: EdgeInsets.only(right: 3.w),
-                        child: Icon(
-                          Icons.download,
-                          size: 3.2.h,
-                          color: AppColors.neutral0,
-                        ),
-                      )
-                    : Padding(
-                        padding: EdgeInsets.only(right: 3.w),
-                        child: Icon(
-                          Icons.close,
-                          size: 3.2.h,
-                          color: AppColors.error100,
-                        ),
-                      ),
-            type == 1
-                ? const Text('HISTÓRICO').button(AppColors.neutral0)
-                : type == 2
-                    ? const Text('BAIXAR NOTA FISCAL')
-                        .button(AppColors.neutral0)
-                    : const Text('CANCELAR SERVIÇO').button(AppColors.error100),
+                : Padding(
+                    padding: EdgeInsets.only(right: 3.w),
+                    child: Icon(
+                      icon,
+                      size: iconSize,
+                      color: iconColor,
+                    ),
+                  ),
+            Text(title).button(
+              type == 2 ? AppColors.error100 : AppColors.neutral0,
+            ),
           ],
         ),
       ),

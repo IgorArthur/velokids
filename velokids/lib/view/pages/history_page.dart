@@ -43,28 +43,31 @@ class HistoryPage extends StatelessWidget {
                   Container(
                       margin: EdgeInsets.symmetric(vertical: 2.h),
                       width: 80.w,
-                      child: const Text('HISTÓRICO').large(AppColors.primary100)),
+                      child:
+                          const Text('HISTÓRICO').large(AppColors.primary100)),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 2.5.h),
-                    child: SearchField(),
+                    child: SearchField(
+                      notifier: mainController.filterField,
+                      onPressed: () {
+                        mainController.filterList();
+                      },
+                    ),
                   ),
-                  HistoryTile(
-                    date: 'Test',
-                    vehicle: 'Test',
-                    time: 'Test',
-                    clientName: 'Test',
-                  ),
-                  HistoryTile(
-                    date: 'Test',
-                    vehicle: 'Test',
-                    time: 'Test',
-                    clientName: 'Test',
-                  ),
-                  HistoryTile(
-                    date: 'Test',
-                    vehicle: 'Test',
-                    time: 'Test',
-                    clientName: 'Test',
+                  SizedBox(
+                    height: 70.h,
+                    child: ListView.builder(
+                        itemCount: mainController.serviceHistory.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return HistoryTile(
+                            date: mainController.serviceHistory[index].date,
+                            time: mainController.serviceHistory[index].time,
+                            vehicle:
+                                mainController.serviceHistory[index].vehicle,
+                            clientName:
+                                mainController.serviceHistory[index].clientName,
+                          );
+                        }),
                   ),
                 ],
               ),
