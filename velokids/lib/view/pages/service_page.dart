@@ -3,40 +3,35 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:velokids/controller/main_controller.dart';
 import 'package:velokids/view/utils/export_utils.dart';
 
-class ServicePage extends StatelessWidget {
+class ServicePage extends GetView<MainController>{
   const ServicePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.neutral0,
-          toolbarHeight: 6.7.h,
-          title: const Text('VELOKIDS').button(AppColors.neutral200),
-          centerTitle: true,
-          leading: TextButton(
-            child: Icon(
-              Icons.arrow_back,
-              color: AppColors.neutral200,
-              size: 5.8.w,
-            ),
-            onPressed: () => _backAlert(context),
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: AppColors.neutral0,
-        body: _handleBody(context),
+        toolbarHeight: 6.7.h,
+        title: const Text('VELOKIDS').button(AppColors.neutral200),
+        centerTitle: true,
+        leading: TextButton(
+          child: Icon(
+            Icons.arrow_back,
+            color: AppColors.neutral200,
+            size: 5.8.w,
+          ),
+          onPressed: () => _backAlert(context),
+        ),
       ),
+      backgroundColor: AppColors.neutral0,
+      body: SafeArea(child: _handleBody(context)),
     );
   }
 
   Widget _handleBody(BuildContext context) {
     final now = DateTime.now();
 
-    return GetBuilder<MainController>(
-        init: MainController(),
-        builder: (mainController) {
-          return SingleChildScrollView(
+    return SingleChildScrollView(
             child: Container(
               margin: EdgeInsets.only(top: 2.h),
               alignment: Alignment.center,
@@ -50,7 +45,7 @@ class ServicePage extends StatelessWidget {
                         Container(
                           alignment: Alignment.centerLeft,
                           width: 30.w,
-                          child: Text(mainController.selectedService.vehicle)
+                          child: Text(controller.selectedService.vehicle)
                               .large(AppColors.primary100),
                         ),
                         const Spacer(),
@@ -66,12 +61,13 @@ class ServicePage extends StatelessWidget {
                   InfoTile(
                     title: 'CLIENTE',
                     hint: 'Nome do cliente',
-                    info: mainController.clientNameField,
+                    info: controller.clientNameField,
                   ),
                   InfoTile(
                     title: 'CPF',
                     hint: '000.000.000-00',
-                    info: mainController.clientDocumentField,
+                    info: controller.clientDocumentField,
+                    keyboardtype: TextInputType.number,
                     mask: [
                       MaskTextInputFormatter(
                         mask: '###.###.###-##',
@@ -82,7 +78,8 @@ class ServicePage extends StatelessWidget {
                   InfoTile(
                     title: 'LOCAÇÃO',
                     hint: '00:00 - 00:00',
-                    info: mainController.rentField,
+                    info: controller.rentField,
+                    keyboardtype: TextInputType.number,
                     mask: [
                       MaskTextInputFormatter(
                         mask: '##:## - ##:##',
@@ -93,7 +90,8 @@ class ServicePage extends StatelessWidget {
                   InfoTile(
                     title: 'VALOR',
                     hint: 'R\$ 00,00',
-                    info: mainController.valueField,
+                    info: controller.valueField,
+                    keyboardtype: TextInputType.number,
                     mask: [
                       MaskTextInputFormatter(
                         mask: 'R\$ ##,##',
@@ -111,7 +109,7 @@ class ServicePage extends StatelessWidget {
                     iconColor: AppColors.error100,
                     iconSize: 5.7.w,
                     onPressed: () {
-                      _cancelAlert(context, mainController);
+                      _cancelAlert(context,);
                     },
                   ),
                   CommonButton(
@@ -121,14 +119,14 @@ class ServicePage extends StatelessWidget {
                     iconColor: AppColors.neutral0,
                     iconSize: 5.7.w,
                     onPressed: () {
-                      _receiptAlert(context, mainController);
+                      _receiptAlert(context,);
                     },
                   ),
                 ],
               ),
             ),
           );
-        });
+        
   }
 
   void _backAlert(
@@ -190,7 +188,7 @@ class ServicePage extends StatelessWidget {
 
   void _cancelAlert(
     BuildContext context,
-    MainController mainController,
+    // MainController controller,
   ) {
     showDialog(
       context: context,
@@ -226,7 +224,7 @@ class ServicePage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                mainController.deleteService();
+                controller.cleanService(controller.selectedService);
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
@@ -249,7 +247,7 @@ class ServicePage extends StatelessWidget {
 
   void _receiptAlert(
     BuildContext context,
-    MainController mainController,
+    // controller controller,
   ) {
     showDialog(
       context: context,
@@ -285,7 +283,7 @@ class ServicePage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                mainController.generateReceiptService();
+                controller.generateReceiptService(controller.selectedService);
                 Navigator.pop(context);
                 Navigator.pop(context);
               },

@@ -1,15 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:velokids/model/history.dart';
 import 'package:velokids/model/service.dart';
+import 'package:velokids/view/utils/boxes.dart';
 
 class MainController extends GetxController {
-  MainController() {
-    _loadVehicles();
-    _loadHistory();
-  }
+  MainController();
 
-  final Map<int, Service> services = <int, Service>{};
+  Map<dynamic, Service> services = <dynamic, Service>{};
   List<History> originalServiceHistory = <History>[];
   List<History> serviceHistory = <History>[];
   ValueNotifier<String> filterField = ValueNotifier('');
@@ -19,68 +20,85 @@ class MainController extends GetxController {
   ValueNotifier<String> rentField = ValueNotifier('');
   ValueNotifier<String> valueField = ValueNotifier('');
 
-  void _loadVehicles() {
-    services[0] = Service(
-      id: 0,
-      vehicle: 'Carro 1',
-      isFree: false,
-      date: '18/06/2022',
-      clientName: 'Igor Arthur',
-      clientDocument: '140.440.734-06',
-      time: '11:30 - 12:30',
-      value: 'RS 50.00',
-    );
-    services[1] = Service(
-      id: 1,
-      vehicle: 'Carro 2',
-      isFree: true,
-      date: '',
-      clientName: '',
-      clientDocument: '',
-      time: '',
-      value: '',
-    );
-    services[2] = Service(
-      id: 2,
-      vehicle: 'Carro 3',
-      isFree: true,
-      date: '',
-      clientName: '',
-      clientDocument: '',
-      time: '',
-      value: '',
-    );
-    services[3] = Service(
-      id: 3,
-      vehicle: 'Moto 1',
-      isFree: true,
-      date: '',
-      clientName: '',
-      clientDocument: '',
-      time: '',
-      value: '',
-    );
-    services[4] = Service(
-      id: 4,
-      vehicle: 'Moto 2',
-      isFree: true,
-      date: '',
-      clientName: '',
-      clientDocument: '',
-      time: '',
-      value: '',
-    );
+  void onInit(){
+    _loadVehicles();
+    _loadHistory();
+  }
 
-    update();
+  // On the first app incialization on the phone, the controller create the services on hive box of services, after this, the services is only going to be updated. 
+  void createVehicles() {
+    var service0 = Service()
+      ..id = 0
+      ..vehicle = 'Carro 1'
+      ..isFree = true
+      ..date = ''
+      ..clientName = ''
+      ..clientDocument = ''
+      ..time = ''
+      ..value = '';
+    Boxes.getService().put(0, service0);
+
+    var service1 = Service()
+      ..id = 1
+      ..vehicle = 'Carro 2'
+      ..isFree = true
+      ..date = ''
+      ..clientName = ''
+      ..clientDocument = ''
+      ..time = ''
+      ..value = '';
+    Boxes.getService().put(1, service1);
+
+    var service2 = Service()
+      ..id = 2
+      ..vehicle = 'Carro 3'
+      ..isFree = true
+      ..date = ''
+      ..clientName = ''
+      ..clientDocument = ''
+      ..time = ''
+      ..value = '';
+    Boxes.getService().put(2, service2);
+
+    var service3 = Service()
+      ..id = 3
+      ..vehicle = 'Moto 1'
+      ..isFree = true
+      ..date = ''
+      ..clientName = ''
+      ..clientDocument = ''
+      ..time = ''
+      ..value = '';
+    Boxes.getService().put(3, service3);
+
+    var service4 = Service()
+      ..id = 4
+      ..vehicle = 'Moto 2'
+      ..isFree = true
+      ..date = ''
+      ..clientName = ''
+      ..clientDocument = ''
+      ..time = ''
+      ..value = '';
+    Boxes.getService().put(4, service4);
+
+    services = Boxes.getService().toMap();
+    
+    log('=============== CRIOU OS 5 SERVICES ==========');
+  }
+
+  void _loadVehicles(){
+    services = Boxes.getService().toMap();
   }
 
   void _loadHistory() {
-    originalServiceHistory = [];
-    serviceHistory = [];
+    originalServiceHistory = Boxes.getHistory().values.toList().cast<History>(); 
+    serviceHistory = originalServiceHistory;
 
     update();
   }
 
+  
   void selectService(Service service) {
     selectedService = service;
 
@@ -92,33 +110,48 @@ class MainController extends GetxController {
     update();
   }
 
-  void generateReceiptService() {
+  // add Service
+  void generateReceiptService(Service service) {
     final now = DateTime.now();
-    services[selectedService.id]!.clientName = clientNameField.value;
-    services[selectedService.id]!.clientDocument = clientDocumentField.value;
-    services[selectedService.id]!.time = rentField.value;
-    services[selectedService.id]!.value = valueField.value;
-    services[selectedService.id]!.isFree = false;
-    services[selectedService.id]!.date = '${now.day}/${now.month}/${now.year}';
 
-    originalServiceHistory.add(
-      History(
-        vehicle: selectedService.vehicle,
-        date: '${now.day}/${now.month}/${now.year}',
-        clientName: clientNameField.value,
-        time: rentField.value,
-      ),
-    );
 
+    service.isFree = false;
+    service.date = '${now.day}/${now.month}/${now.year}';
+    service.clientName = clientNameField.value;
+    service.clientDocument = clientDocumentField.value;
+    service.time = rentField.value;
+    service.value = valueField.value;
+
+    service.save();
+
+    services = Boxes.getService().toMap();
+
+    
+    // Add service on the History
+
+    var history = History()
+      ..vehicle = selectedService.vehicle
+      ..date = '${now.day}/${now.month}/${now.year}'
+      ..clientName = clientNameField.value
+      ..time = rentField.value;
+
+    Boxes.getHistory().add(history);
+
+    originalServiceHistory = Boxes.getHistory().values.toList().cast<History>(); 
     serviceHistory = originalServiceHistory;
-
-    update();
 
     update();
   }
 
-  void deleteService() {
-    services[selectedService.id]!.cleanService();
+  void cleanService(Service service) {
+    service.isFree = true;
+    service.date = '';
+    service.clientName = '';
+    service.clientDocument = '';
+    service.time = '';
+    service.value = '';
+
+    service.save();
 
     update();
   }

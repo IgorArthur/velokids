@@ -2,31 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:velokids/controller/main_controller.dart';
 import 'package:velokids/view/utils/export_utils.dart';
 import 'package:velokids/view/utils/search_field.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import '../utils/boxes.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.neutral0,
-          toolbarHeight: 6.7.h,
-          title: const Text('VELOKIDS').button(AppColors.neutral200),
-          centerTitle: true,
-          leading: TextButton(
-            child: Icon(
-              Icons.arrow_back,
-              color: AppColors.neutral200,
-              size: 5.8.w,
-            ),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: AppColors.neutral0,
-        body: _handleBody(),
+        toolbarHeight: 6.7.h,
+        title: const Text('VELOKIDS').button(AppColors.neutral200),
+        centerTitle: true,
+        leading: TextButton(
+          child: Icon(
+            Icons.arrow_back,
+            color: AppColors.neutral200,
+            size: 5.8.w,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
+      backgroundColor: AppColors.neutral0,
+      body: ValueListenableBuilder<Box>(
+          valueListenable: Boxes.getHistory().listenable(),
+          builder: (context, box, widget) {
+            // final history = Boxes.getHistory().values.toList().cast<History>();
+
+            return SafeArea(child: _handleBody());
+          }),
     );
   }
 

@@ -1,13 +1,25 @@
-class History {
-  History({
-    required this.vehicle,
-    required this.date,
-    required this.clientName,
-    required this.time,
-  });
+import 'package:hive/hive.dart';
 
-  final String vehicle;
-  final String date;
-  final String clientName;
-  final String time;
+part 'history.g.dart';
+
+
+// Para futuras alterações em produção: 
+//  Se excluir algum @HiveField, nunca usar o mesmo número já utilizado antes.
+//  Para ediçao e troca de tipo de um @HiveField, trocar o número, e NUNCA utilizar um número utilizado antes
+//  Recomendação: Deixar comentado todos os campos que não forem ser mais utilizados. 
+
+@HiveType(typeId: 0)
+class History extends HiveObject {
+  
+  @HiveField(0)
+  late String vehicle;
+
+  @HiveField(1)
+  late String date;
+
+  @HiveField(2)
+  late String clientName;
+
+  @HiveField(3)
+  late String time;
 }

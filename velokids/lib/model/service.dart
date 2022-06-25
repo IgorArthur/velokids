@@ -1,31 +1,36 @@
-class Service {
-  Service({
-    required this.id,
-    required this.vehicle,
-    
-    required this.isFree,
-    required this.date,
-    required this.clientName,
-    required this.clientDocument,
-    required this.time,
-    required this.value,
-  });
+import 'package:hive_flutter/hive_flutter.dart';
 
-  final int id;
-  final String vehicle;
+part 'service.g.dart';
+
+// Para futuras alterações em produção: 
+//  Se excluir algum @HiveField, nunca usar o mesmo número já utilizado antes.
+//  Para ediçao e troca de tipo de um @HiveField, trocar o número, e NUNCA utilizar um número utilizado antes
+//  Recomendação: Deixar comentado todos os campos que não forem ser mais utilizados. 
+
+@HiveType(typeId: 1)
+class Service extends HiveObject {
+
+  @HiveField(0)
+  late int id;
+
+  @HiveField(1)
+  late String vehicle;
+  
+  @HiveField(2)
   late bool isFree;
-  late String date;
-  late String clientName;
-  late String clientDocument;
-  late String time;
-  late String value;
 
-  void cleanService() {
-    isFree = true;
-    date = '';
-    clientName = '';
-    clientDocument = '';
-    time = '';
-    value = '';
-  }
+  @HiveField(3)
+  late String date;
+
+  @HiveField(4)
+  late String clientName;
+
+  @HiveField(5)
+  late String clientDocument;
+  
+  @HiveField(6)
+  late String time;
+  
+  @HiveField(7)
+  late String value;
 }
