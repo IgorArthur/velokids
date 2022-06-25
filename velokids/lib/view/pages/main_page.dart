@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:velokids/controller/main_controller.dart';
+import 'package:velokids/view/utils/boxes.dart';
 import 'package:velokids/view/utils/export_utils.dart';
 
 class MainPage extends StatelessWidget {
@@ -7,17 +8,15 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.neutral0,
-          toolbarHeight: 6.7.h,
-          title: const Text('VELOKIDS').button(AppColors.neutral200),
-          centerTitle: true,
-        ),
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: AppColors.neutral0,
-        body: _handleBody(context),
+        toolbarHeight: 6.7.h,
+        title: const Text('VELOKIDS').button(AppColors.neutral200),
+        centerTitle: true,
       ),
+      backgroundColor: AppColors.neutral0,
+      body: SafeArea(child: _handleBody(context)),
     );
   }
 
@@ -32,23 +31,23 @@ class MainPage extends StatelessWidget {
             child: Column(
               children: [
                 MainTile(
-                  service: mainController.services[0]!,
+                  service: Boxes.getService().get(0)!,
                   controller: mainController,
                 ),
                 MainTile(
-                  service: mainController.services[1]!,
+                  service: Boxes.getService().get(1)!,
                   controller: mainController,
                 ),
                 MainTile(
-                  service: mainController.services[2]!,
+                  service: Boxes.getService().get(2)!,
                   controller: mainController,
                 ),
                 MainTile(
-                  service: mainController.services[3]!,
+                  service: Boxes.getService().get(3)!,
                   controller: mainController,
                 ),
                 MainTile(
-                  service: mainController.services[4]!,
+                  service: Boxes.getService().get(4)!,
                   controller: mainController,
                 ),
                 Padding(

@@ -6,11 +6,12 @@ import 'package:velokids/view/utils/export_utils.dart';
 
 class InfoTile extends StatelessWidget {
   InfoTile(
-      {Key? key, required this.title, required this.info, this.mask, this.hint})
+      {Key? key, required this.title, required this.info, this.mask, this.hint, this.keyboardtype})
       : super(key: key);
 
   String title;
   ValueNotifier<String> info;
+  TextInputType? keyboardtype;
 
   String? hint;
   List<TextInputFormatter>? mask;
@@ -43,6 +44,7 @@ class InfoTile extends StatelessWidget {
                   },
                   inputFormatters: mask,
                   initialValue: info.value,
+                  keyboardType: keyboardtype ?? TextInputType.text,
                   decoration: InputDecoration(
                     enabledBorder: InputBorder.none,
                     border: InputBorder.none,
